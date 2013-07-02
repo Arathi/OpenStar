@@ -16,8 +16,10 @@ import org.beh.popstar.*;
 public class PopstarView extends JPanel implements MouseListener {
 	protected PopstarCore game;
 	private BufferedImage[] imgStars;
+	public static final int BlockLength=25;
+	
 	/**
-	 * Create the panel.
+	 * 无参构造器
 	 */
 	public PopstarView() {
 		game=new PopstarCore();
@@ -36,23 +38,25 @@ public class PopstarView extends JPanel implements MouseListener {
 			e.printStackTrace();
 		}
 	}
+	
 	@Override
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
-		g.drawRect(0, 0, 450, 450);
+		g.drawRect(0, 0, BlockLength*10, BlockLength*10);
 		if (game==null) return;
 		int x, y;
 		for (y=0; y<PopstarCore.Height; y++){
 			for (x=0; x<PopstarCore.Width; x++){
 				int type=game.getStar(x, y);
-				g.drawImage(imgStars[type], x*45, (PopstarCore.Height-y-1)*45, this);
+				//g.drawImage(imgStars[type], x*BlockLength, (PopstarCore.Height-y-1)*BlockLength, this);
+				g.drawImage(imgStars[type], x*BlockLength, (PopstarCore.Height-y-1)*BlockLength, BlockLength, BlockLength, this);
 			}
 		}
 	}
+	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
+	public void mouseClicked(MouseEvent e) {}
 	@Override
 	public void mouseEntered(MouseEvent e) {}
 	@Override
@@ -65,9 +69,10 @@ public class PopstarView extends JPanel implements MouseListener {
 		if (game.isGameEnd()) return;
 		int mousex=e.getX(), mousey=e.getY();
 		int x,y;
-		x=mousex/45;
-		y=mousey/45;
-		y=PopstarCore.Height-y;
+		x=mousex/BlockLength;
+		y=mousey/BlockLength;
+		y=PopstarCore.Height-y-1;
+		System.out.println("当前点击为置坐标: ("+mousex+","+mousey+")");
 		System.out.println(x+","+y);
 		if (x>=0 && x<PopstarCore.Width && y>=0 && y<PopstarCore.Height){
 			game.touch(x, y);

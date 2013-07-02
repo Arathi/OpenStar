@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 
 public class PopstarMain {
 
-	private JFrame frame;
+	private JFrame frmPopstarsimulator;
 	private PopstarView view;
 	private PopstarCore game;
 	
@@ -25,7 +25,7 @@ public class PopstarMain {
 			public void run() {
 				try {
 					PopstarMain window = new PopstarMain();
-					window.frame.setVisible(true);
+					window.frmPopstarsimulator.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -48,14 +48,18 @@ public class PopstarMain {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 468, 490);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPopstarsimulator = new JFrame();
+		frmPopstarsimulator.setResizable(false);
+		frmPopstarsimulator.setTitle("Popstar!Simulator");
+		//frmPopstarsimulator.setBounds(100, 100, 458, 478);
+		frmPopstarsimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		view = new PopstarView();
-		frame.getContentPane().add(view, BorderLayout.CENTER);
+		frmPopstarsimulator.getContentPane().add(view, BorderLayout.CENTER);
 
-		frame.addMouseListener(view);
+		//frmPopstarsimulator.addMouseListener(view);
+		view.addMouseListener(view);
+		frmPopstarsimulator.setBounds(100, 100, PopstarCore.Width*PopstarView.BlockLength+7, PopstarCore.Height*PopstarView.BlockLength+29);
 	}
 
 }
