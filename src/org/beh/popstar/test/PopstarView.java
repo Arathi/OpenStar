@@ -52,38 +52,29 @@ public class PopstarView extends JPanel implements MouseListener {
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("PopstarView-Clicked");
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (game.isGameEnd()) return;
 		int mousex=e.getX(), mousey=e.getY();
 		int x,y;
 		x=mousex/45;
 		y=mousey/45;
-		y=PopstarCore.Height-y-1;
+		y=PopstarCore.Height-y;
 		System.out.println(x+","+y);
 		if (x>=0 && x<PopstarCore.Width && y>=0 && y<PopstarCore.Height){
 			game.touch(x, y);
+			game.scan();
+			
 			repaint();
 		}
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		//System.out.println("PopstarView-Entered");
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		//System.out.println("PopstarView-Exited");
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		//System.out.println("PopstarView-Pressed");
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		//System.out.println("PopstarView-Released");
 	}
 	
 }

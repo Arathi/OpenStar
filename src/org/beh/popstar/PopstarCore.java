@@ -12,18 +12,21 @@ public class PopstarCore {
 	protected boolean[][] popedFlags;
 	protected int combo;
 	protected int score;
+	protected boolean runningFlag;
 	
 	//Getters
 	public int getStar(int x, int y){
 		return stars[x][y];
 	}
-	private boolean isPoped(int x, int y){
+	public boolean isPoped(int x, int y){
 		return popedFlags[x][y];
 	}
 	public int getScore(){
 		return score;
 	}
-	
+	public boolean isGameEnd(){
+		return !runningFlag;
+	}
 	
 	/**
 	 * 构造器
@@ -41,6 +44,7 @@ public class PopstarCore {
 		popedFlags=new boolean[Width][Height];
 		combo=0;
 		score=0;
+		runningFlag=false;
 	}
 	
 	/**
@@ -113,6 +117,7 @@ public class PopstarCore {
 		fillStars();
 		resetPopedFlags();
 		System.out.println(toString());
+		runningFlag=true;
 	}
 	
 	/**
@@ -137,6 +142,7 @@ public class PopstarCore {
 		int type, counter;
 		if (!check(x,y)) return 0;
 		type=stars[x][y];
+		if (type==0) return 0;
 		counter=pop(x, y, type);
 		if (counter==1){
 			counter=0;
@@ -261,13 +267,18 @@ public class PopstarCore {
 	
 	public int touch(int x, int y){
 		//y=Height-y-1;
-		System.out.println("连续方块数量: "+pop(x,y));
+		int blocks=pop(x,y);
+		System.out.println("连续方块数量: "+blocks);
 		//
-		clearPopedBlocks();
+		if (blocks>1){
+			clearPopedBlocks();
+			resetPopedFlags();
+			blocksFall();
+			blocksMoveLeft();
+		}
+		combo=0;
 		resetPopedFlags();
-		blocksFall();
-		blocksMoveLeft();
-		System.out.println(toString());
+		//System.out.println(toString());
 		return 0;
 	}
 	
@@ -312,17 +323,32 @@ public class PopstarCore {
 		return key;
 	}
 	
-	public void scan(){
+	public int scan(){
 		int x,y,counter=0;
 		for (x=0; x<Width; x++){
 			for (y=0; y<Height; y++){
 				combo=0;
 				if (pop(x, y)>1) {
 					counter++;
-					System.out.println("CASE "+counter+": ("+x+","+y+")"+" Combo "+combo);					
+					//System.out.println("CASE "+counter+": ("+x+","+y+")"+" Combo "+combo);					
 				}
 			}
 		}
+		if (counter>0){
+			System.out.println("当前情况有"+counter+"处可被点击");
+		}
+		else{
+			runningFlag=false;
+			for (x=0; x<Width; x++){
+				for (y=0; y<Height; y++){
+					if (stars[x][y]!=0) counter++;
+				}
+			}
+			System.out.println("游戏结束，剩余方块数量："+counter);
+		}
+		resetPopedFlags();
+		combo=0;
+		return counter;
 	}
 
 }

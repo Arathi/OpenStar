@@ -49,7 +49,7 @@ public class PopstarMain {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 480, 500);
+		frame.setBounds(100, 100, 468, 490);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		view = new PopstarView();
