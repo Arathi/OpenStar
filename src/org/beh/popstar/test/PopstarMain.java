@@ -51,7 +51,7 @@ public class PopstarMain {
 		frmPopstarsimulator.getContentPane().add(view, BorderLayout.CENTER);
 
 		view.addMouseListener(view);
-		frmPopstarsimulator.setBounds(100, 100, PopstarCore.Width*(PopstarView.BlockLength+PopstarView.BlockSpace*2)+6, PopstarCore.Height*(PopstarView.BlockLength+PopstarView.BlockSpace*2)+28);
+		frmPopstarsimulator.setBounds(100, 100, PopstarCore.Width*(PopstarView.BlockLength+PopstarView.BlockSpace*2)+6, PopstarCore.Height*(PopstarView.BlockLength+PopstarView.BlockSpace*2)+PopstarView.HeadHeight+28);
 	}
 
 }

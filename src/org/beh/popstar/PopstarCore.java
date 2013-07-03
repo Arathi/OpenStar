@@ -2,6 +2,11 @@ package org.beh.popstar;
 
 import java.util.Random;
 
+/** Popstar核心<p>
+ * <b>计分规则：</b><br/>
+ * 消灭得分=块*块*5<br/>
+ * 结束得分=2000-块*块*20<br/>
+ * */
 public class PopstarCore {
 	public static final int Width=10;
 	public static final int Height=10;
@@ -12,6 +17,7 @@ public class PopstarCore {
 	protected boolean[][] popedFlags;
 	protected int combo;
 	protected int score;
+	protected int target;
 	protected boolean runningFlag;
 	
 	//Getters
@@ -45,6 +51,7 @@ public class PopstarCore {
 		combo=0;
 		score=0;
 		runningFlag=false;
+		target=1000;
 	}
 	
 	/**
@@ -144,7 +151,7 @@ public class PopstarCore {
 		type=stars[x][y];
 		if (type==0) return 0;
 		counter=pop(x, y, type);
-		if (counter==1){
+		if (counter<=1){
 			counter=0;
 			popedFlags[x][y]=false;
 			//resetPopedFlags();
@@ -265,29 +272,63 @@ public class PopstarCore {
 		}
 	}
 	
-	public int touch(int x, int y){
-		//y=Height-y-1;
+	public boolean select(int x, int y){
+		//TODO 选择
+		resetPopedFlags();
+		combo=0;
 		int blocks=pop(x,y);
 		System.out.println("连续方块数量: "+blocks);
-		//
+		if (blocks>1) return true;
+		return false;
+	}
+	/**
+	 * 确认消除(已停用)
+	 */
+	@Deprecated
+	public int confirm(int x, int y){
+		//TODO 确认
+		if (popedFlags[x][y]){
+			clearPopedBlocks();
+			resetPopedFlags();
+			blocksFall();
+			blocksMoveLeft();
+		}
+		return 0;
+	}
+	/**
+	 * 确认消除
+	 * @return 消除方块数量
+	 */
+	public int confirm(){
+		int blocks=combo;
+		System.out.println("消除方块数量: "+blocks);
+		clearPopedBlocks();
+		resetPopedFlags();
+		combo=0;
+		blocksFall();
+		blocksMoveLeft();
+		addScore(blocks*blocks*5);
+		scan();
+		return blocks;
+	}
+	
+	/**
+	 * 触击(已停用)
+	 */
+	@Deprecated
+	public int touch(int x, int y){
+		int blocks=pop(x,y);
+		System.out.println("连续方块数量: "+blocks);
 		if (blocks>1){
 			clearPopedBlocks();
 			resetPopedFlags();
 			blocksFall();
 			blocksMoveLeft();
 		}
+		addScore(blocks*blocks*5);
 		combo=0;
 		resetPopedFlags();
-		//System.out.println(toString());
 		return 0;
-	}
-	
-	public static void main(String[] args){
-		PopstarCore pc=new PopstarCore();
-		pc.begin();
-		System.out.println(pc.toKey());
-		//pc.touch(4, 9);
-		pc.scan();
 	}
 	
 	@Override
@@ -330,7 +371,6 @@ public class PopstarCore {
 				combo=0;
 				if (pop(x, y)>1) {
 					counter++;
-					//System.out.println("CASE "+counter+": ("+x+","+y+")"+" Combo "+combo);					
 				}
 			}
 		}
@@ -344,11 +384,34 @@ public class PopstarCore {
 					if (stars[x][y]!=0) counter++;
 				}
 			}
-			System.out.println("游戏结束，剩余方块数量："+counter);
+			System.out.println("本关结束，剩余方块数量："+counter);
+			if (counter<10){
+				addScore(2000-counter*counter*20);
+			}
+			if (score>=target){
+				target+=2000;
+				System.out.println("进入下一关，目标分数"+target);
+				fillStars();
+				runningFlag=true;
+			}
+			else{
+				System.out.println("游戏结束");
+			}
 		}
 		resetPopedFlags();
 		combo=0;
 		return counter;
+	}
+	
+	private void addScore(int addition){
+		if (addition>0){
+			score+=addition;
+			System.out.println("分数+"+addition);
+		}
+	}
+	public int getTarget() {
+		// TODO Auto-generated method stub
+		return target;
 	}
 
 }
