@@ -1,7 +1,2 @@
-*.class
-bin/*
-
-# Package Files #
+/bin
 *.jar
-*.war
-*.ear
